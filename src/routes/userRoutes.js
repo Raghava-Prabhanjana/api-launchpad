@@ -1,25 +1,30 @@
 const express = require("express");
 const router = express.Router();
 
-// Existing Route
+const users = [
+  { id: 1, name: "Alice" },
+  { id: 2, name: "Bob" },
+];
+
 router.get("/", (req, res) => {
-  res.json([
-    { id: 1, name: "Alice" },
-    { id: 2, name: "Bob" },
-  ]);
+  res.json(users);
 });
 
-// TODO: Add a new route
-// Route: GET /api/users/:id
-// Return the user based on ID
 router.get("/:id", (req, res) => {
   const userId = parseInt(req.params.id);
-  const users = [
-    { id: 1, name: "Alice" },
-    { id: 2, name: "Bob" },
-  ];
-  const user = users.find((u) => u.id === id);
+  const user = users.find((u) => u.id === userId);
 
-  res.json(user);
+  if (!user) {
+    return res.status(404).json({
+      status: "error",
+      message: "User not found",
+    });
+  }
+
+  res.json({
+    status: "success",
+    data: user,
+  });
 });
+
 module.exports = router;
